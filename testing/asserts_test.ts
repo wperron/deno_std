@@ -146,10 +146,7 @@ Deno.test("testingNotEquals", function (): void {
     new Date(2019, 0, 3, 4, 20, 1, 10),
     new Date(2019, 0, 3, 4, 20, 1, 20),
   );
-  assertNotEquals(
-    new Date("invalid"),
-    new Date(2019, 0, 3, 4, 20, 1, 20),
-  );
+  assertNotEquals(new Date("invalid"), new Date(2019, 0, 3, 4, 20, 1, 20));
   let didThrow;
   try {
     assertNotEquals("Raptor", "Raptor");
@@ -298,6 +295,12 @@ Deno.test("testingAssertObjectMatching", function (): void {
   const e = { foo: true } as { [key: string]: unknown };
   e.bar = e;
   const f = { [sym]: true, bar: false };
+  interface r {
+    foo: boolean;
+    bar: boolean;
+  }
+  const g: r = { foo: true, bar: false };
+
   // Simple subset
   assertObjectMatch(a, {
     foo: true,
@@ -337,6 +340,8 @@ Deno.test("testingAssertObjectMatching", function (): void {
       },
     },
   });
+  // Subset with interface
+  assertObjectMatch(g, { bar: false });
   // Subset with same symbol
   assertObjectMatch(f, {
     [sym]: true,
@@ -345,12 +350,15 @@ Deno.test("testingAssertObjectMatching", function (): void {
   {
     let didThrow;
     try {
-      assertObjectMatch({
-        foo: true,
-      }, {
-        foo: true,
-        bar: false,
-      });
+      assertObjectMatch(
+        {
+          foo: true,
+        },
+        {
+          foo: true,
+          bar: false,
+        },
+      );
       didThrow = false;
     } catch (e) {
       assert(e instanceof AssertionError);
@@ -647,10 +655,7 @@ Deno.test({
     );
     assertThrows(
       (): void =>
-        assertEquals(
-          new Date("invalid"),
-          new Date(2019, 0, 3, 4, 20, 1, 20),
-        ),
+        assertEquals(new Date("invalid"), new Date(2019, 0, 3, 4, 20, 1, 20)),
       AssertionError,
       [
         "Values are not equal:",

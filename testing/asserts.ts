@@ -72,7 +72,9 @@ function buildMessage(diffResult: ReadonlyArray<DiffResult<string>>): string[] {
   messages.push("");
   messages.push(
     `    ${gray(bold("[Diff]"))} ${red(bold("Actual"))} / ${
-      green(bold("Expected"))
+      green(
+        bold("Expected"),
+      )
     }`,
   );
   messages.push("");
@@ -297,7 +299,9 @@ export function assertStrictEquals(
         .join("\n");
       message =
         `Values have the same structure but are not reference-equal:\n\n${
-          red(withOffset)
+          red(
+            withOffset,
+          )
         }\n`;
     } else {
       try {
@@ -351,10 +355,7 @@ export function assertNotStrictEquals(
  * Make an assertion that actual is not null or undefined. If not
  * then thrown.
  */
-export function assertExists(
-  actual: unknown,
-  msg?: string,
-): void {
+export function assertExists(actual: unknown, msg?: string): void {
   if (actual === undefined || actual === null) {
     if (!msg) {
       msg =
@@ -424,7 +425,9 @@ export function assertArrayIncludes(
   }
   if (!msg) {
     msg = `actual: "${_format(actual)}" expected to include: "${
-      _format(expected)
+      _format(
+        expected,
+      )
     }"\nmissing: ${_format(missing)}`;
   }
   throw new AssertionError(msg);
@@ -469,7 +472,7 @@ export function assertNotMatch(
  * If not, then throw.
  */
 export function assertObjectMatch(
-  actual: Record<PropertyKey, unknown>,
+  actual: Record<PropertyKey, any>,
   expected: Record<PropertyKey, unknown>,
 ): void {
   type loose = Record<PropertyKey, unknown>;
@@ -477,7 +480,7 @@ export function assertObjectMatch(
   return assertEquals(
     (function filter(a: loose, b: loose): loose {
       // Prevent infinite loop with circular references with same filter
-      if ((seen.has(a)) && (seen.get(a) === b)) {
+      if (seen.has(a) && seen.get(a) === b) {
         return a;
       }
       seen.set(a, b);
@@ -493,7 +496,7 @@ export function assertObjectMatch(
       for (const [key, value] of entries) {
         if (typeof value === "object") {
           const subset = (b as loose)[key];
-          if ((typeof subset === "object") && (subset)) {
+          if (typeof subset === "object" && subset) {
             filtered[key] = filter(value as loose, subset as loose);
             continue;
           }

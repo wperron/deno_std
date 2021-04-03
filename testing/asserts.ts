@@ -299,9 +299,7 @@ export function assertStrictEquals(
         .join("\n");
       message =
         `Values have the same structure but are not reference-equal:\n\n${
-          red(
-            withOffset,
-          )
+          red(withOffset)
         }\n`;
     } else {
       try {
@@ -355,7 +353,10 @@ export function assertNotStrictEquals(
  * Make an assertion that actual is not null or undefined. If not
  * then thrown.
  */
-export function assertExists(actual: unknown, msg?: string): void {
+export function assertExists(
+  actual: unknown,
+  msg?: string,
+): void {
   if (actual === undefined || actual === null) {
     if (!msg) {
       msg =
@@ -425,9 +426,7 @@ export function assertArrayIncludes(
   }
   if (!msg) {
     msg = `actual: "${_format(actual)}" expected to include: "${
-      _format(
-        expected,
-      )
+      _format(expected)
     }"\nmissing: ${_format(missing)}`;
   }
   throw new AssertionError(msg);
